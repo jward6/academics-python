@@ -71,5 +71,24 @@ class Test(unittest.TestCase):
         self.assertTrue(result == 15)
         self.assertTrue(len(q) == 1)
 
+    def test_first(self):
+        q = CircularQueue()
+        q.enqueue(15)
+        q.enqueue(20)
+        q.enqueue(25)
+        self.assertTrue(q.first() == 15)
+
+    def test_rotate(self):
+        q = CircularQueue()
+        q.enqueue(15)
+        q.enqueue(20)
+        q.enqueue(25)
+
+        q.rotate()
+
+        self.assertTrue(len(q) == 3)
+        self.assertTrue(q.first() == 15)
+
+
 if __name__ == '__main__':
     unittest.main()
