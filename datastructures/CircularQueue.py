@@ -1,7 +1,5 @@
 import unittest
-
-class Empty(Exception):
-    pass
+from empty import Empty
 
 class CircularQueue:
 
@@ -13,7 +11,8 @@ class CircularQueue:
             self._next = next
 
     def __init__(self):
-        self._tail = None
+        self._head = self._Node(None, None)
+        self._tail = self._Node(None, self._head)
         self._size = 0
 
     def __len__(self):
@@ -31,23 +30,13 @@ class CircularQueue:
     def dequeue(self):
         if self.is_empty():
             raise Empty('Queue is empty')
-        oldhead = self._tail._next
-        if self._size == 1:
-            self._tail = None
-        else:
-            self._tail._next = oldhead._next
+        oldhead = self._tail
+        self._tail = oldhead._next
         self._size -= 1
         return oldhead._element
 
     def enqueue(self, e):
-        newest = self._Node(e, None)
-        if self.is_empty():
-            # newest is tail and head
-            newest._next = newest
-        else:
-            # Insert between tail and head
-            newest._next = self._tail._next
-            self._tail._next = newest
+        newest = self._Node(e, self._tail._next)
         self._tail = newest
         self._size += 1
 
@@ -60,23 +49,23 @@ class Test(unittest.TestCase):
     def test_enqueue(self):
         q = CircularQueue()
         q.enqueue(15)
-        self.assertTrue(len(q) == 1)
-        self.assertTrue(q.first() == 15)
+        self.assertEqual(len(q), 1)
+        self.assertEqual(q.first(), 15)
 
     def test_dequeue(self):
         q = CircularQueue()
         q.enqueue(15)
         q.enqueue(20)
         result = q.dequeue()
-        self.assertTrue(result == 15)
-        self.assertTrue(len(q) == 1)
+        self.assertEqual(result, 15)
+        self.assertEqual(len(q), 1)
 
     def test_first(self):
         q = CircularQueue()
         q.enqueue(15)
         q.enqueue(20)
         q.enqueue(25)
-        self.assertTrue(q.first() == 15)
+        self.assertEqual(q.first(), 15)
 
     def test_rotate(self):
         q = CircularQueue()
@@ -86,8 +75,8 @@ class Test(unittest.TestCase):
 
         q.rotate()
 
-        self.assertTrue(len(q) == 3)
-        self.assertTrue(q.first() == 15)
+        self.assertEqual(len(q), 3)
+        self.assertEqual(q.first(), 15)
 
 
 if __name__ == '__main__':
