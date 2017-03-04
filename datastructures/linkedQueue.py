@@ -101,6 +101,10 @@ class Test(unittest.TestCase):
         self.assertEqual(len(q), 2)
         self.assertEqual(result, 15)
         self.assertEqual(q.first(), 20)
+        result = q.dequeue()
+        self.assertEqual(result, 20)
+        result = q.dequeue()
+        self.assertEqual(result, 25)
 
     def test_rotate(self):
         q = LinkedQueue()
